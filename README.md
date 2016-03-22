@@ -6,11 +6,11 @@ Pentaho BI Community Edition container, with helper script to configure the Pent
 To build the container:
 
 ```
-git clone https://bitbucket.org/five_corp/docker-pentaho.git
-cd docker-pentaho
+git clone https://github.com/rjrivero/docker-pentaho-env.git
+cd docker-pentaho-env
 
 # To build the x86 version
-docker build -t pentaho:master .
+docker build -t pentaho-env .
 ```
 
 To run:
@@ -18,7 +18,7 @@ To run:
 ```
 docker run --rm -p 8080:8080 \
            -v /opt/pentaho/biserver-ce:/opt/biserver-ce \
-           --name pentaho pentaho:master
+           --name pentaho pentaho-env
 ```
 
 The container exposes **port 8080**.
@@ -46,7 +46,7 @@ The container includes a helper script to help configure the Pentaho installatio
 e.g, run:
 
 ```
-docker run --rm -it -v /opt/pentaho/biserver-ce:/opt/biserver-ce \
+docker run --rm -it -v /opt/pentaho/biserver-ce:/opt/biserver-ce pentaho-env \
     /opt/config.sh mysql.server.com 3306 prefix_ MySecret1234 > script.sql
 ```
 
