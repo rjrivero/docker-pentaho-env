@@ -5,11 +5,11 @@ cd ${PENTAHO_HOME} || exit -1
 
 # Prepare the server to run behind a proxy.
 # See http://wiki.bizcubed.com.au/xwiki/bin/view/Pentaho+Tutorial/NGiNX+Reverse+SSL+Proxy+for+Pentaho
-if [ "x$PROXY_PORT" != "x" ]; then
+if [ "x${PROXY_PORT}" != "x" ]; then
     # Once the proxyPort is defined, do not define it again.
     # Otherwise restarting the container breaks
-    if [ ! grep -q proxyPort ${PENTAHO_HOME}/tomcat/conf/server.xml ]; then
-        sed -i "s/<Connector URIEncoding=\"UTF-8\" port=\"8080\" protocol=\"HTTP\/1.1\"/<Connector URIEncoding=\"UTF-8\" port=\"8080\" protocol=\"HTTP\/1.1\" proxyPort=\"$PROXY_PORT\" scheme=\"$PROXY_SCHEME\"/" ${PENTAHO_HOME}/tomcat/conf/server.xml
+    if ! grep -q proxyPort ${PENTAHO_HOME}/tomcat/conf/server.xml; then
+        sed -i "s/<Connector URIEncoding=\"UTF-8\" port=\"8080\" protocol=\"HTTP\/1.1\"/<Connector URIEncoding=\"UTF-8\" port=\"8080\" protocol=\"HTTP\/1.1\" proxyPort=\"${PROXY_PORT}\" scheme=\"${PROXY_SCHEME}\"/" ${PENTAHO_HOME}/tomcat/conf/server.xml
     fi
 fi
 

@@ -17,7 +17,7 @@ RUN echo -e "\n" | add-apt-repository ppa:webupd8team/java && \
     apt-get -qq update && \
     echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    oracle-java7-installer oracle-java7-set-default xvfb && \
+    nginx oracle-java7-installer oracle-java7-set-default xvfb && \
     update-java-alternatives -s java-7-oracle && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     groupadd -g 1000 pentaho && \
@@ -48,15 +48,17 @@ ENV PENTAHO_JAVA "/usr/lib/jvm/java-${JAVA_VERSION}-oracle/jre/bin/java"
 ADD files/install.sh /opt/install.sh
 RUN /opt/install.sh && rm -f /opt/install.sh
 
-ADD files/opt     /opt
-ADD files/service /etc/service
+ADD files/my-init.d /etc/my-init.d
+ADD files/opt       /opt
+ADD files/service   /etc/service
+ADD files/nginx     /etc/nginx/sites-available
 
 # If this instance is to be run behind a proxy, the proxy port and
 # scheme must be given as environment variables, e.g.
 # PROXY_PORT=443
 # PROXY_SCHEME=https
-ENV PROXY_PORT ""
-ENV PROXY_SCHEME ""
+ENV PROXY_PORT "80"
+ENV PROXY_SCHEME "http"
 
-# Pentaho user console
-EXPOSE 8080
+# nginx reverse proxy
+EXPOSE 80

@@ -39,7 +39,7 @@ cd tomcat-native-${TCN_VERSION}-src/jni/native
 make
 make install
 
-# Clean up. LEave wget and openssl, otherwise java7 is removed too.
+# Clean up. Leave wget and openssl, otherwise java7 is removed too.
 DEBIAN_ENVIRONMENT=noninteractive apt-get remove -y \
     build-essential libssl-dev
 DEBIAN_ENVIRONMENT=noninteractive apt-get autoremove -y
