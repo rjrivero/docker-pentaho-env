@@ -48,7 +48,7 @@ ENV PENTAHO_JAVA "/usr/lib/jvm/java-${JAVA_VERSION}-oracle/jre/bin/java"
 ADD files/install.sh /opt/install.sh
 RUN /opt/install.sh && rm -f /opt/install.sh
 
-ADD files/my-init.d /etc/my-init.d
+ADD files/my_init.d /etc/my_init.d
 ADD files/opt       /opt
 ADD files/service   /etc/service
 ADD files/nginx     /etc/nginx/sites-available
