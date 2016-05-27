@@ -17,11 +17,11 @@ RUN echo -e "\n" | add-apt-repository ppa:webupd8team/java && \
     apt-get -qq update && \
     echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    nginx oracle-java7-installer oracle-java7-set-default xvfb && \
+    oracle-java7-installer oracle-java7-set-default xvfb && \
     update-java-alternatives -s java-7-oracle && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     groupadd -g 1000 pentaho && \
-    useradd -g pentaho -u 1000 -m pentaho && \
+    useradd  -g pentaho -u 1000 -m pentaho && \
     mkdir /opt/scratch && \
     chown pentaho:pentaho /opt/scratch
 
@@ -31,6 +31,17 @@ ENV APR_VERSION 1.5.2
 ENV TCN_VERSION 1.1.34
 ENV LOG4J_EXTRAS_VERSION 1.2.17
 ENV JAVA_VERSION 7
+
+# Install libtcnative libraries and other dependencies
+ADD files/install.sh /opt/install.sh
+RUN /opt/install.sh && rm -f /opt/install.sh
+
+# Now that all the heavy lifting (installing packages and dependencies)
+# is done, begin the small tasks.
+
+# First, add configuration and service files
+ADD files/service /etc/service
+ADD files/opt     /opt
 
 # Pentaho must be downloaded, uncompressed and mounted as a volume
 # in the path /opt/biserver-ce.
@@ -44,21 +55,12 @@ WORKDIR /opt/biserver-ce
 ENV PENTAHO_JAVA_HOME "/usr/lib/jvm/java-${JAVA_VERSION}-oracle/jre"
 ENV PENTAHO_JAVA "/usr/lib/jvm/java-${JAVA_VERSION}-oracle/jre/bin/java"
 
-# Add configuration files and install libtcnative libraries
-ADD files/install.sh /opt/install.sh
-RUN /opt/install.sh && rm -f /opt/install.sh
-
-ADD files/my_init.d /etc/my_init.d
-ADD files/opt       /opt
-ADD files/service   /etc/service
-ADD files/nginx     /etc/nginx/sites-available
-
 # If this instance is to be run behind a proxy, the proxy port and
 # scheme must be given as environment variables, e.g.
 # PROXY_PORT=443
 # PROXY_SCHEME=https
-ENV PROXY_PORT "80"
+ENV PROXY_PORT   "80"
 ENV PROXY_SCHEME "http"
 
-# nginx reverse proxy
-EXPOSE 80
+# Pentaho port
+EXPOSE 8080
