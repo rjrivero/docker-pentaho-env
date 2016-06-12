@@ -26,6 +26,9 @@ touch /home/pentaho/esapi/ESAPI.properties
 touch /home/pentaho/.kettle/kettle.properties
 chown -R pentaho:pentaho /home/pentaho
 
+# Make sure hazelcast cache is started
+sv start hazelcast || exit 1
+
 # Run pentaho server
 cd ${PENTAHO_HOME}
 exec /sbin/setuser pentaho ${PENTAHO_HOME}/tomcat/bin/startup.sh

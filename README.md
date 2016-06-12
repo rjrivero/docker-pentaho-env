@@ -28,10 +28,14 @@ Volumes
 
 Pentaho runs from directory **/opt/biserver-ce**. You must:
 
-  - Download the Pentaho Business Analytics Platform - Community Edition
-    software from http://community.pentaho.com
+  - Download the Pentaho Business Analytics Platform - Community Edition software from http://community.pentaho.com
   - Unzip it somewhere in your host server, say **/opt/pentaho**
   - Mount the resulting **/opt/pentaho/biserver-ce** folder to the container, in the **/opt/biserver-ce** path.
+
+  - Install the [Community Distributed Cache](http://pedroalves-bi.blogspot.com.es/2012/05/cdc-community-distributed-cache.html) from the marketplace.
+
+    - You may need to manually copy the files from *solution/system/cdc/pentaho-lib* to *tomcat/webapps/pentaho/WEB-INF/lib*.
+The container provides the [standalone node for CDC](http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-pentaho5/dist/cdc-pentaho5-redist-SNAPSHOT.zip) already running, for the benefit of your CDC.
 
 Configuration
 -------------
@@ -64,3 +68,13 @@ Typically, if deploying behind a ssl proxy, the values of these environment vari
 
   - PROXY_PORT=443
   - PROXY_SCHEME=https
+
+Caching with CDC
+----------------
+
+You can install the [Community Distributed Cache](http://pedroalves-bi.blogspot.com.es/2012/05/cdc-community-distributed-cache.html) from the marketplace to improve caching control (allows you to clean the CDA cache of a single dashboard, selectively).
+
+Once the plugin is installed, you may need to manually copy the files from *solution/system/cdc/pentaho-lib* to *tomcat/webapps/pentaho/WEB-INF/lib*, and reboot the server.
+
+For your convenience, this container includes the [standalone node for CDC](http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-pentaho5/dist/cdc-pentaho5-redist-SNAPSHOT.zip) already running, so CDC should be up and running as soon as you install it.
+

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+exec /sbin/setuser pentaho /opt/hazelcast/launch-hazelcast.sh
