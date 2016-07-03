@@ -82,10 +82,32 @@ The default Pentaho config misses a few opportunities for optimizations:
 
   - Enable server mode for the JVM by adding the flag **-server** to the JVM commandline at *tomcat/bin/startup.sh*
   - Set the heap initial and maximum size at the same file.
+  - Disable Audit Logging by replacing the *IAuditEntry* bean at *./pentaho-solutions/system/pentahoObjects.spring.xml* with the following bean:
+
+```
+<bean id="IAuditEntry" class="org.pentaho.platform.engine.core.audit.NullAuditEntry" scope="singleton" />
+```
+
+  - Since this is a docker container, logs are better sent to the console instead of a file. To change the logging settings,
+
+    - Remove the references to the PENTAHOFILE appender at *tomcat/webapps/pentaho/WEB-INF/classes/log4j.xml*
+    - Change the logging levels at *pentaho-solutions/system/cda/log4j.xml*a
+    - Leave only one handler at the **.handlers** stanza of *tomcat/logging.properties*:
+
+```
+.handlers = java.util.logging.ConsoleHandler
+
+```
+
+
   - Improve the configuration of the tomcat Connector at *tomcat/conf/server.xml*:
 
     - Uncomment the *tomcatThreadPool* Executor tag and add the *executor="tomcatThreadPool"* attribute to the Connector tag. 200 threads per CPU is the suggested configuration for the Executor.
-    - Replace the blocking scheduler by adding the attribute *protocol="org.apache.coyote.http11.Http11AprProtocol"* to the Connector tag.
+    - If your installation must support keepalives, replace the blocking BIO scheduler by the native APR one, adding the attribute *protocol="org.apache.coyote.http11.Http11AprProtocol"* to the Connector tag.
+
+      - Notice that if there are no keepalives, even in the face of high concurrency, the BIO scheduler (*protocol="HTTP/1.1"*) is preferred.
+      - If that's the case, disable keepalives altogether with the *maxKeepAliveRequests=1* attribute.
+
     - Disable DNS lookups by adding the attribute *enableLookups=false"* to the Connector tag.
 
 Caching with CDC
