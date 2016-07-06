@@ -9,6 +9,7 @@ DEBIAN_FRONTEND=noninteractive apt-get install -y \
 
 # Get libraries
 cd /usr/local/src
+wget "https://jdbc.postgresql.org/download/postgresql-${PGSQL_CONN_VERSION}.jar"
 wget "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONN_VERSION}.tar.gz"
 wget "http://apache.rediris.es/apr/apr-${APR_VERSION}.tar.bz2"
 wget "http://apache.rediris.es/tomcat/tomcat-connectors/native/${TCN_VERSION}/source/tomcat-native-${TCN_VERSION}-src.tar.gz"
@@ -18,6 +19,9 @@ wget "http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-
 # Uncompress MySQL connector
 tar -xzvf "mysql-connector-java-${MYSQL_CONN_VERSION}.tar.gz"
 mv mysql-connector-java-${MYSQL_CONN_VERSION}/mysql-connector-java-${MYSQL_CONN_VERSION}-bin.jar /usr/local/lib
+
+# Move postgresql connector to /usr/local/lib
+mv postgresql-${PGSQL_CONN_VERSION}.jar /usr/local/lib
 
 # Uncompress log4j extras
 tar -xzvf apache-log4j-extras-${LOG4J_EXTRAS_VERSION}-bin.tar.gz

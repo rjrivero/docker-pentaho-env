@@ -17,6 +17,7 @@ fi
 rm -f ${PENTAHO_HOME}/tomcat/lib/mysql-connector-java*.jar
 rm -f ${PENTAHO_HOME}/tomcat/lib/apache-log4j-extras*.jar
 cp -f /usr/local/lib/mysql-connector-java-${MYSQL_CONN_VERSION}-bin.jar ${PENTAHO_HOME}/tomcat/lib
+cp -f /usr/local/lib/postgresql-${PGSQL_CONN_VERSION}.jar ${PENTAHO_HOME}/tomcat/lib
 cp -f /usr/local/lib/apache-log4j-extras-${LOG4J_EXTRAS_VERSION}.jar ${PENTAHO_HOME}/tomcat/lib
 
 # Create properties files to avoid error messages

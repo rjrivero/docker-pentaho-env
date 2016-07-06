@@ -26,9 +26,15 @@ RUN echo -e "\n" | add-apt-repository ppa:webupd8team/java && \
     chown pentaho:pentaho /opt/scratch
 
 # Support software versions
-ENV MYSQL_CONN_VERSION 5.1.38
+# Get this version from https://dev.mysql.com/downloads/connector/j/
+ENV MYSQL_CONN_VERSION 5.1.39
+# Get this version from https://jdbc.postgresql.org/download.html
+ENV PGSQL_CONN_VERSION 9.4.1208.jre7
+# Get this version from https://apr.apache.org/download.cgi
 ENV APR_VERSION 1.5.2
+# Get this version from https://tomcat.apache.org/download-native.cgi
 ENV TCN_VERSION 1.1.34
+# Get this version from https://logging.apache.org/log4j/extras/
 ENV LOG4J_EXTRAS_VERSION 1.2.17
 ENV JAVA_VERSION 7
 
