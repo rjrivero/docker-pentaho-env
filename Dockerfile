@@ -6,7 +6,7 @@ MAINTAINER rjrivero
 # Install dependencies.
 #
 # - xvfb to support headless reports
-# - webupd8 ppa for java 7. See
+# - webupd8 ppa for java 8. See
 # http://www.webupd8.org/2012/01/install-oracle-java-jdk-7-in-ubuntu-via.html
 #
 # Add pentaho user and group
@@ -15,10 +15,11 @@ MAINTAINER rjrivero
 # configuration files
 RUN echo -e "\n" | add-apt-repository ppa:webupd8team/java && \
     apt-get -qq update && \
-    echo oracle-java7-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
+    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    oracle-java7-installer oracle-java7-set-default xvfb && \
-    update-java-alternatives -s java-7-oracle && \
+    oracle-java8-installer oracle-java8-set-default xvfb \
+    wget build-essential openssl unzip libssl-dev libapr1-dev && \
+    update-java-alternatives -s java-8-oracle && \
     apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
     groupadd -g 1000 pentaho && \
     useradd  -g pentaho -u 1000 -m pentaho && \
@@ -29,18 +30,23 @@ RUN echo -e "\n" | add-apt-repository ppa:webupd8team/java && \
 # Get this version from https://dev.mysql.com/downloads/connector/j/
 ENV MYSQL_CONN_VERSION 5.1.39
 # Get this version from https://jdbc.postgresql.org/download.html
-ENV PGSQL_CONN_VERSION 9.4.1208.jre7
+ENV PGSQL_CONN_VERSION 9.4.1209
 # Get this version from https://apr.apache.org/download.cgi
-ENV APR_VERSION 1.5.2
+# ENV APR_VERSION 1.5.2
 # Get this version from https://tomcat.apache.org/download-native.cgi
 ENV TCN_VERSION 1.1.34
 # Get this version from https://logging.apache.org/log4j/extras/
 ENV LOG4J_EXTRAS_VERSION 1.2.17
-ENV JAVA_VERSION 7
+ENV JAVA_VERSION 8
 
 # Install libtcnative libraries and other dependencies
-ADD files/install.sh /opt/install.sh
-RUN /opt/install.sh && rm -f /opt/install.sh
+ADD files/install /opt/install
+RUN /opt/install/mysql.sh
+RUN /opt/install/pgsql.sh
+RUN /opt/install/cdc.sh
+RUN /opt/install/log4j.sh
+RUN /opt/install/tcnative.sh
+RUN rm -rf /opt/install
 
 # Now that all the heavy lifting (installing packages and dependencies)
 # is done, begin the small tasks.
