@@ -44,7 +44,8 @@ ADD files/install /opt/install
 RUN /opt/install/mysql.sh
 RUN /opt/install/pgsql.sh
 RUN /opt/install/cdc.sh
-RUN /opt/install/log4j.sh
+# Skip log4j, messes up with the hsqldb version
+#RUN /opt/install/log4j.sh
 RUN /opt/install/tcnative.sh
 RUN rm -rf /opt/install
 

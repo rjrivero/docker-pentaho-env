@@ -26,10 +26,15 @@ mkdir -p /home/pentaho/.kettle
 touch /home/pentaho/esapi/ESAPI.properties
 touch /home/pentaho/.kettle/kettle.properties
 chown -R pentaho:pentaho /home/pentaho
+chown -R pentaho:pentaho ${PENTAHO_HOME}
 
 # Make sure hazelcast cache is started
 sv start hazelcast || exit 1
 
 # Run pentaho server
 cd ${PENTAHO_HOME}
-exec /sbin/setuser pentaho ${PENTAHO_HOME}/tomcat/bin/startup.sh
+#This does not work when using embedded hiperbase
+#exec /sbin/setuser pentaho ${PENTAHO_HOME}/tomcat/bin/startup.sh
+
+# Warning! first time must be run manually, queries for auto-update system
+exec /sbin/setuser pentaho ${PENTAHO_HOME}/start-pentaho.sh

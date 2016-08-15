@@ -1,0 +1,4 @@
+#!/usr/bin/env sh
+# Do not restart the service in an infinite loop. Otherwise,
+# there may be memory leaks when tomcat fails unexpectedly.
+sleep infinity
