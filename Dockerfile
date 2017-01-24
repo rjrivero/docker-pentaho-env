@@ -36,6 +36,8 @@ ENV APR_VERSION 1.5.2
 ENV TCN_VERSION 1.1.34
 # Get this version from https://logging.apache.org/log4j/extras/
 ENV LOG4J_EXTRAS_VERSION 1.2.17
+# C3P0 connection pool from  https://sourceforge.net/projects/c3p0/
+ENV C3P0_VERSION 0.9.5.2
 ENV JAVA_VERSION 7
 
 # Install libtcnative libraries and other dependencies

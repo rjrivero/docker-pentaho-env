@@ -15,6 +15,12 @@ wget "http://apache.rediris.es/apr/apr-${APR_VERSION}.tar.bz2"
 wget "http://apache.rediris.es/tomcat/tomcat-connectors/native/${TCN_VERSION}/source/tomcat-native-${TCN_VERSION}-src.tar.gz"
 wget "http://apache.rediris.es/logging/log4j/extras/${LOG4J_EXTRAS_VERSION}/apache-log4j-extras-${LOG4J_EXTRAS_VERSION}-bin.tar.gz"
 wget "http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-pentaho5/dist/cdc-pentaho5-redist-SNAPSHOT.zip"
+wget "https://sourceforge.net/projects/c3p0/files/c3p0-bin/c3p0-${C3P0_VERSION}/c3p0-${C3P0_VERSION}.bin.tgz/download"
+mv download "c3p0-${C3P0_VERSION}.tgz"
+
+# Uncompress C3P0 connector
+tar -xzvf "c3p0-${C3P0_VERSION}.tgz"
+mv c3p0-${C3P0_VERSION}/lib/* /usr/local/lib
 
 # Uncompress MySQL connector
 tar -xzvf "mysql-connector-java-${MYSQL_CONN_VERSION}.tar.gz"
