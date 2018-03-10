@@ -5,6 +5,7 @@ cd ${PENTAHO_HOME} || exit -1
 
 # Prepare the server to run behind a proxy.
 # See http://wiki.bizcubed.com.au/xwiki/bin/view/Pentaho+Tutorial/NGiNX+Reverse+SSL+Proxy+for+Pentaho
+# NOTE: does not work with Pentaho 7.1.0 (needs 7.1.5 at least)
 if [ "x${PROXY_PORT}" != "x" ]; then
     # Once the proxyPort is defined, do not define it again.
     # Otherwise restarting the container breaks
@@ -28,8 +29,10 @@ touch /home/pentaho/.kettle/kettle.properties
 chown -R pentaho:pentaho /home/pentaho
 
 # Make sure hazelcast cache is started
-sv start hazelcast || exit 1
+# NOTE: no Hazelcast installation in 7.1, CDC binary is not available
+# sv start hazelcast || exit 1
 
 # Run pentaho server
 cd ${PENTAHO_HOME}
 exec /sbin/setuser pentaho ${PENTAHO_HOME}/tomcat/bin/startup.sh
+

@@ -14,7 +14,7 @@ wget "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYS
 wget "http://apache.rediris.es/apr/apr-${APR_VERSION}.tar.bz2"
 wget "http://apache.rediris.es/tomcat/tomcat-connectors/native/${TCN_VERSION}/source/tomcat-native-${TCN_VERSION}-src.tar.gz"
 wget "http://apache.rediris.es/logging/log4j/extras/${LOG4J_EXTRAS_VERSION}/apache-log4j-extras-${LOG4J_EXTRAS_VERSION}-bin.tar.gz"
-wget "http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-pentaho5/dist/cdc-pentaho5-redist-SNAPSHOT.zip"
+# wget "http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-pentaho5/dist/cdc-pentaho5-redist-SNAPSHOT.zip"
 wget "https://sourceforge.net/projects/c3p0/files/c3p0-bin/c3p0-${C3P0_VERSION}/c3p0-${C3P0_VERSION}.bin.tgz/download"
 mv download "c3p0-${C3P0_VERSION}.tgz"
 
@@ -51,15 +51,15 @@ make
 make install
 
 # Uncompress CDC standalone node
-cd /usr/local/src
-mkdir hazelcast
-cd hazelcast
-unzip ../cdc-pentaho5-redist-SNAPSHOT.zip
-chmod 0755 launch-hazelcast.sh
-cd ..
-mv hazelcast /opt
+# cd /usr/local/src
+# mkdir hazelcast
+# cd hazelcast
+# unzip ../cdc-pentaho5-redist-SNAPSHOT.zip
+# chmod 0755 launch-hazelcast.sh
+# cd ..
+# mv hazelcast /opt
 
-# Clean up. Leave wget and openssl, otherwise java7 is removed too.
+# Clean up. Leave wget and openssl, otherwise java is removed too.
 DEBIAN_ENVIRONMENT=noninteractive apt-get remove -y \
     build-essential libssl-dev
 DEBIAN_ENVIRONMENT=noninteractive apt-get autoremove -y
@@ -68,3 +68,4 @@ rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
 rm -rf /var/cache/oracle-jdk${JAVA_VERSION}-installer
 rm -rf /usr/lib/jvm/java-${JAVA_VERSION}-oracle/src.zip
 rm -rf /usr/local/src/*
+

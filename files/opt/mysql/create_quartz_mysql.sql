@@ -1,7 +1,7 @@
 #
 # Quartz seems to work best with the driver mm.mysql-2.0.7-bin.jar
 #
-# In your Quartz properties file, you will need to set 
+# In your Quartz properties file, you'll need to set
 # org.quartz.jobStore.driverDelegateClass = org.quartz.impl.jdbcjobstore.StdJDBCDelegate
 #
 

@@ -10,32 +10,6 @@
     <param-value></param-value>
   </context-param>
 
-  <!--
-    <context-param> <param-name>pentaho-system-cfg</param-name>
-  -->
-  <!--  This context parameter is being deprecated. We don't use this any more. We have added a new context parameter called fully-qualified-server-url -->
-  <context-param>
-    <param-name>base-url</param-name>
-    <param-value></param-value>
-  </context-param>
-
-  <!--  FullyQualifiedServerUrl is used only in the case of offline content generation and whenever something need to talk back to the server -->
-  <context-param>
-    <param-name>fully-qualified-server-url</param-name>
-    <param-value>http://localhost:8080/pentaho/</param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>locale-language</param-name>
-    <!-- for example 'fr' for French, 'de' for German, da for danish -->
-    <param-value></param-value>
-  </context-param>
-
-  <context-param>
-    <param-name>locale-country</param-name>
-    <!-- for example 'FR' for France, 'CA' for Canada -->
-    <param-value></param-value>
-  </context-param>
   <context-param>
     <param-name>contextClass</param-name>
     <param-value>org.pentaho.platform.web.http.context.PentahoSolutionSpringApplicationContext</param-value>
@@ -48,35 +22,11 @@
     <param-value>pentaho-spring-beans.xml</param-value>
   </context-param>
 
-  <context-param>
-    <param-name>pentahoObjectFactory</param-name>
-    <param-value>org.pentaho.platform.web.http.context.WebSpringPentahoObjectFactory</param-value>
-  </context-param>
-
-  <!--
-    This defaults to UTF-8. Uncomment this section and change the value
-    for other encodings. Also change the URIEncoding in Tomcat's
-    server.xml.
-  -->
-  <context-param>
-    <param-name>encoding</param-name>
-    <param-value>UTF-8</param-value>
-  </context-param>
-
-  <!--
-    this defaults to LTR (left to right), uncomment this section and
-    change the value for other text directions <context-param>
-    <param-name>text-direction</param-name> <param-value>RTL</param-value>
-    </context-param>
-  -->
-
   <!-- [BEGIN HSQLDB DATABASES] -->
-  <!--
   <context-param>
     <param-name>hsqldb-databases</param-name>
     <param-value>sampledata@../../data/hsqldb/sampledata,hibernate@../../data/hsqldb/hibernate,quartz@../../data/hsqldb/quartz</param-value>
   </context-param>
-  -->
   <!-- [END HSQLDB DATABASES] -->
 
   <!-- insert additional context-params -->
@@ -111,9 +61,9 @@
 
   <filter>
     <filter-name>Spring Security Filter Chain Proxy</filter-name>
-    <filter-class>org.springframework.security.util.FilterToBeanProxy</filter-class>
+    <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
     <init-param>
-      <param-name>targetBean</param-name>
+      <param-name>targetBeanName</param-name>
       <param-value>filterChainProxy</param-value>
     </init-param>
   </filter>
@@ -129,6 +79,7 @@
     </init-param>
   </filter>
 
+  <!-- Remove proxy filter
   <filter>
     <filter-name>Proxy Trusting Filter</filter-name>
     <filter-class>org.pentaho.platform.web.http.filters.ProxyTrustingFilter</filter-class>
@@ -138,6 +89,7 @@
       <description>Comma separated list of IP addresses of a trusted hosts.</description>
     </init-param>
   </filter>
+  -->
 
   <!--  Pentaho Web Context Filter checks to see if webcontext.js is being requested. It writes the content of webcontext.js
         webcontext.js contains value for CONTEXT_PATH and FULLY_QUALIFIED_SERVER_URL
@@ -174,6 +126,11 @@
     <url-pattern>/ServiceActionService</url-pattern>
   </filter-mapping>
 
+  <filter-mapping>
+    <filter-name>Proxy Trusting Filter</filter-name>
+    <url-pattern>/i18n</url-pattern>
+  </filter-mapping>
+
   <!--
     Filter mapping for security. Note that all objects are locked down. We
     could change this here as desired.
@@ -199,17 +156,20 @@
   <listener>
     <listener-class>org.pentaho.platform.web.http.context.SpringEnvironmentSetupListener</listener-class>
   </listener>
+
+    <listener>
+        <listener-class>org.apache.felix.http.proxy.ProxyListener</listener-class>
+    </listener>
+
   <!--   enables session and request scoped object creation in Spring -->
   <listener>
     <listener-class>org.springframework.web.context.request.RequestContextListener</listener-class>
   </listener>
 
   <!-- [BEGIN HSQLDB STARTER] -->
-  <!--
   <listener>
     <listener-class>org.pentaho.platform.web.http.context.HsqldbStartupListener</listener-class>
   </listener>
-  -->
   <!-- [END HSQLDB STARTER] -->
 
   <listener>
@@ -227,7 +187,7 @@
   <!-- END OF ORDER DEPENDENCE -->
 
   <listener>
-    <listener-class>org.springframework.security.ui.session.HttpSessionEventPublisher</listener-class>
+    <listener-class>org.springframework.security.web.session.HttpSessionEventPublisher</listener-class>
   </listener>
 
   <listener>
@@ -248,7 +208,7 @@
 	   has been started and is ready, spring has been initialized and all plugins have been loaded -->
   <listener>
     <listener-class>org.pentaho.platform.web.http.context.PentahoSystemReadyListener</listener-class>
-  </listener>	
+  </listener>
 
   <servlet>
     <servlet-name>ViewAction</servlet-name>
@@ -398,9 +358,21 @@
     <servlet-class>org.pentaho.platform.web.servlet.ThemeServlet</servlet-class>
   </servlet>
 
+
+    <servlet>
+        <servlet-name>proxy</servlet-name>
+        <servlet-class>org.apache.felix.http.proxy.ProxyServlet</servlet-class>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+
   <!-- insert additional servlets -->
 
   <servlet-mapping>
+        <servlet-name>proxy</servlet-name>
+        <url-pattern>/osgi/*</url-pattern>
+    </servlet-mapping>
+
+	<servlet-mapping>
     <servlet-name>Carte</servlet-name>
     <url-pattern>/kettle/*</url-pattern>
   </servlet-mapping>
@@ -594,7 +566,7 @@
       <transport-guarantee>NONE</transport-guarantee>
     </user-data-constraint>
   </security-constraint>
-  
+
   <security-role>
 		<description>Non-Existent Role - this prevents direct access to JSPs</description>
 		<role-name>PENTAHO_ADMIN</role-name>

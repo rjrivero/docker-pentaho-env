@@ -146,6 +146,7 @@
     <param name="schemaObjectPrefix" value="ds_repos_"/>
   </DataStore>
 
+
   <DataStore class="org.apache.jackrabbit.core.data.FileDataStore"/>
   -->
 
@@ -250,6 +251,7 @@
       <param name="schemaObjectPrefix" value="fs_ws_"/>
     </FileSystem>
 
+
     <FileSystem class="org.apache.jackrabbit.core.fs.local.LocalFileSystem">
       <param name="path" value="${wsp.home}"/>
     </FileSystem>
@@ -306,6 +308,7 @@
       <param name="schemaObjectPrefix" value="${wsp.name}_pm_ws_"/>
     </PersistenceManager>
 
+
     <PersistenceManager class="org.apache.jackrabbit.core.persistence.pool.H2PersistenceManager">
       <param name="url" value="jdbc:h2:${wsp.home}/db"/>
       <param name="schemaObjectPrefix" value="${wsp.name}_"/>
@@ -323,23 +326,7 @@
 
 
     <WorkspaceSecurity>
-      <AccessControlProvider class="org.apache.jackrabbit.core.security.authorization.acl.PentahoACLProvider">
-        <!-- Param names have the prefix magicAceDefinition along with a consecutive integer -->
-        <!-- Param values have four values separated by colons. -->
-        <!-- Param value subitem #1: path possibly including {0} which will be replaced by tenantId -->
-        <!-- Param value subitem #2: ABS action name -->
-        <!-- Param value subitem #3: comma-separated list of JCR privileges -->
-        <!-- Param value subitem #4: boolean where true means that path is a prefix and not to be matched exactly -->
-        <param name="magicAceDefinition0" value="{0};org.pentaho.security.administerSecurity;jcr:all;true;true;false" />
-        <param name="magicAceDefinition1"
-value="{0};org.pentaho.repository.read;jcr:read,jcr:readAccessControl;true;false;true" />
-        <param name="magicAceDefinition2"
-value="{0}/etc/pdi;org.pentaho.repository.read;jcr:read,jcr:readAccessControl;true;false;false" />
-        <param name="magicAceDefinition3"
-value="{0}/etc/pdi;org.pentaho.repository.create;jcr:read,jcr:readAccessControl,jcr:write,jcr:modifyAccessControl,jcr:lockManagement,jcr:versionManagement,jcr:nodeTypeManagement;true;false;false" />
-        <param name="magicAceDefinition4"
-value="{0}/etc;org.pentaho.security.publish;jcr:read,jcr:readAccessControl,jcr:write,jcr:modifyAccessControl,jcr:lockManagement,jcr:versionManagement,jcr:nodeTypeManagement;true;true;false" />
-      </AccessControlProvider>
+      <AccessControlProvider class="org.apache.jackrabbit.core.security.authorization.acl.PentahoACLProvider"/>
     </WorkspaceSecurity>
 
   </Workspace>
@@ -465,10 +452,16 @@ value="{0}/etc;org.pentaho.security.publish;jcr:read,jcr:readAccessControl,jcr:w
       Search index for content that is shared repository wide
       (/jcr:system tree, contains mainly versions)
   -->
+  <!--
+    In the platform, jackrabbit's lucene is trying to index all the text from every file in the repository. 
+    This is just to do a natural language search. This, however, is a feature neither BA nor DI servers support.
+  -->
+  <!--
   <SearchIndex class="org.apache.jackrabbit.core.query.lucene.SearchIndex">
     <param name="path" value="${rep.home}/repository/index"/>
     <param name="supportHighlighting" value="true"/>
   </SearchIndex>
+  -->
 
   <!--
       Run with a cluster journal
