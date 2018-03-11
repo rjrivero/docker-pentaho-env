@@ -1,7 +1,0 @@
-#!/bin/sh
-
-export LOGDIR=/var/log/pentaho
-export SVCUSER=pentaho
-
-mkdir -p "${LOGDIR}" && chown ${SVCUSER}:${SVCUSER} "${LOGDIR}"
-exec /sbin/setuser ${SVCUSER} svlogd -tt "${LOGDIR}"

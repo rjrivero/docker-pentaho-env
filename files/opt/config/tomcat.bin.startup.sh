@@ -45,7 +45,7 @@ PRGDIR=`dirname "$PRG"`
 EXECUTABLE=catalina.sh
 
 ## CHANGED
-DI_HOME=/opt/biserver-ce/pentaho-solutions/system/kettle
+DI_HOME=/opt/pentaho-server/pentaho-solutions/system/kettle
 
 # Check that target executable exists
 if $os400; then

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PENTAHO_HOME=/opt/biserver-ce
+export PENTAHO_HOME=/opt/pentaho-server
 cd ${PENTAHO_HOME} || exit -1
 
 if [ $# -lt 4 ]; then
@@ -19,6 +19,8 @@ fi
 # Configuration file golden repository and scratch space
 export CONFIG_GOLDEN=/opt/config
 export CONFIG_HOME=/opt/scratch
+mkdir -p "${CONFIG_HOME}"
+
     
 # Get configuration parameters:
 # 1: MYSQL Server name
@@ -64,9 +66,6 @@ mv -f ${CONFIG_HOME}/tomcat.webapps.pentaho.WEB-INF.web.xml ${PENTAHO_HOME}/tomc
 # Tomcat logging settings. See
 # http://forums.pentaho.com/showthread.php?189137-Log-rotation-for-Pentaho-5-3-BI-server
 mv -f ${CONFIG_HOME}/tomcat.conf.logging.properties ${PENTAHO_HOME}/tomcat/conf/logging.properties
-
-# Set correct permisions for pentaho files
-chown -R pentaho:pentaho /opt/biserver-ce
 
 # Dump the required SQL statements to create the databases
 export SQL_HOME=/opt/mysql

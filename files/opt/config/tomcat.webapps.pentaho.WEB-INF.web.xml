@@ -23,10 +23,12 @@
   </context-param>
 
   <!-- [BEGIN HSQLDB DATABASES] -->
+  <!--
   <context-param>
     <param-name>hsqldb-databases</param-name>
     <param-value>sampledata@../../data/hsqldb/sampledata,hibernate@../../data/hsqldb/hibernate,quartz@../../data/hsqldb/quartz</param-value>
   </context-param>
+  -->
   <!-- [END HSQLDB DATABASES] -->
 
   <!-- insert additional context-params -->
@@ -79,7 +81,6 @@
     </init-param>
   </filter>
 
-  <!-- Remove proxy filter
   <filter>
     <filter-name>Proxy Trusting Filter</filter-name>
     <filter-class>org.pentaho.platform.web.http.filters.ProxyTrustingFilter</filter-class>
@@ -89,7 +90,6 @@
       <description>Comma separated list of IP addresses of a trusted hosts.</description>
     </init-param>
   </filter>
-  -->
 
   <!--  Pentaho Web Context Filter checks to see if webcontext.js is being requested. It writes the content of webcontext.js
         webcontext.js contains value for CONTEXT_PATH and FULLY_QUALIFIED_SERVER_URL
@@ -167,9 +167,11 @@
   </listener>
 
   <!-- [BEGIN HSQLDB STARTER] -->
+  <!--
   <listener>
     <listener-class>org.pentaho.platform.web.http.context.HsqldbStartupListener</listener-class>
   </listener>
+  -->
   <!-- [END HSQLDB STARTER] -->
 
   <listener>
@@ -516,6 +518,7 @@
 
   <!-- insert additional servlet mappings -->
   <session-config>
+    <tracking-mode>COOKIE</tracking-mode>
     <session-timeout>120</session-timeout>
   </session-config>
 

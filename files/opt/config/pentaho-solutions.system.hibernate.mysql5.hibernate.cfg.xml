@@ -4,21 +4,9 @@
   "http://hibernate.sourceforge.net/hibernate-configuration-3.0.dtd">
 <hibernate-configuration>
   <session-factory>
-    <!-- Recommended connection pool -->
-    <property name="connection.provider_class">org.hibernate.connection.C3P0ConnectionProvider</property>
-    <property name="hibernate.c3p0.acquire_increment">3</property>
-    <property name="hibernate.c3p0.idle_test_period">10</property>
-    <property name="hibernate.c3p0.min_size">5</property>
-    <property name="hibernate.c3p0.max_size">75</property>
-    <property name="hibernate.c3p0.max_statements">0</property>
-    <property name="hibernate.c3p0.timeout">25200</property>
-    <property name="hibernate.c3p0.preferredTestQuery">select 1</property>
-    <property name="hibernate.c3p0.testConnectionOnCheckin">true</property>
-    <property name="hibernate.c3p0.acquireRetryAttempts">30</property>
-    <property name="hibernate.c3p0.acquireRetryIncrement">5</property>
-    <property name="hibernate.c3p0.idleConnectionTestPeriod">180</property>
+  
+  	<property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
 
-    <property name="cache.provider_class">net.sf.ehcache.hibernate.SingletonEhCacheProvider</property>
     <property name="hibernate.generate_statistics">true</property>
     <property name="hibernate.cache.use_query_cache">true</property>
   

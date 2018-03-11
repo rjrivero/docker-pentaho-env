@@ -1,13 +1,14 @@
 #!/usr/bin/env bash
 
+export DEBIAN_FRONTEND=noninteractive
 set -eo pipefail
 
 # install dependencies
 apt-get -qq update
-DEBIAN_FRONTEND=noninteractive apt-get install -y \
-	wget build-essential openssl unzip libssl-dev
+apt-get install -y wget build-essential openssl unzip libssl-dev
 
 # Get libraries
+mkdir -p /usr/local/src
 cd /usr/local/src
 wget "https://jdbc.postgresql.org/download/postgresql-${PGSQL_CONN_VERSION}.jar"
 wget "https://dev.mysql.com/get/Downloads/Connector-J/mysql-connector-java-${MYSQL_CONN_VERSION}.tar.gz"
@@ -20,18 +21,18 @@ mv download "c3p0-${C3P0_VERSION}.tgz"
 
 # Uncompress C3P0 connector
 tar -xzvf "c3p0-${C3P0_VERSION}.tgz"
-mv c3p0-${C3P0_VERSION}/lib/* /usr/local/lib
+mv c3p0-${C3P0_VERSION}/lib/* ${JAVA_HOME}/lib
 
 # Uncompress MySQL connector
 tar -xzvf "mysql-connector-java-${MYSQL_CONN_VERSION}.tar.gz"
-mv mysql-connector-java-${MYSQL_CONN_VERSION}/mysql-connector-java-${MYSQL_CONN_VERSION}-bin.jar /usr/local/lib
+mv mysql-connector-java-${MYSQL_CONN_VERSION}/mysql-connector-java-${MYSQL_CONN_VERSION}-bin.jar ${JAVA_HOME}/lib
 
 # Move postgresql connector to /usr/local/lib
-mv postgresql-${PGSQL_CONN_VERSION}.jar /usr/local/lib
+mv postgresql-${PGSQL_CONN_VERSION}.jar ${JAVA_HOME}/lib
 
 # Uncompress log4j extras
 tar -xzvf apache-log4j-extras-${LOG4J_EXTRAS_VERSION}-bin.tar.gz
-mv apache-log4j-extras-${LOG4J_EXTRAS_VERSION}/apache-log4j-extras-${LOG4J_EXTRAS_VERSION}.jar /usr/local/lib
+mv apache-log4j-extras-${LOG4J_EXTRAS_VERSION}/apache-log4j-extras-${LOG4J_EXTRAS_VERSION}.jar ${JAVA_HOME}/lib
 
 # Uncompress and build apache APR
 tar -xjvf apr-${APR_VERSION}.tar.bz2
@@ -41,7 +42,6 @@ make
 make install
 
 # Uncompress and build tcnative
-export JAVA_HOME=/usr/lib/jvm/java-${JAVA_VERSION}-oracle
 cd /usr/local/src
 tar -xzvf tomcat-native-${TCN_VERSION}-src.tar.gz
 cd tomcat-native-${TCN_VERSION}-src/jni/native
@@ -60,12 +60,9 @@ make install
 # mv hazelcast /opt
 
 # Clean up. Leave wget and openssl, otherwise java is removed too.
-DEBIAN_ENVIRONMENT=noninteractive apt-get remove -y \
-    build-essential libssl-dev
-DEBIAN_ENVIRONMENT=noninteractive apt-get autoremove -y
+apt-get remove -y build-essential libssl-dev
+apt-get autoremove -y
 apt-get clean -y
 rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
-rm -rf /var/cache/oracle-jdk${JAVA_VERSION}-installer
-rm -rf /usr/lib/jvm/java-${JAVA_VERSION}-oracle/src.zip
 rm -rf /usr/local/src/*
 

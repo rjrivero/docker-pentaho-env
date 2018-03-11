@@ -1,28 +1,21 @@
-FROM phusion/baseimage:latest
+FROM ibmjava:8-sdk
 
 MAINTAINER rjrivero
 
 # Install dependencies.
 #
 # - xvfb to support headless reports
-# - webupd8 ppa for java 8. See
+#
+# Oracle java no longer used, but link kept here for reference:
 # http://www.webupd8.org/2012/01/install-oracle-java-jdk-7-in-ubuntu-via.html
 #
-# Add pentaho user and group
-#
-# Create /opt/config and /opt/bootstrp folders for
-# configuration files
-RUN echo -e "\n" | add-apt-repository ppa:webupd8team/java && \
-    apt-get -qq update && \
-    echo oracle-java8-installer shared/accepted-oracle-license-v1-1 select true | /usr/bin/debconf-set-selections && \
-    DEBIAN_FRONTEND=noninteractive apt-get install -y \
-    oracle-java8-installer oracle-java8-set-default xvfb && \
-    update-java-alternatives -s java-8-oracle && \
-    apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/* && \
-    groupadd -g 1000 pentaho && \
-    useradd  -g pentaho -u 1000 -m pentaho && \
-    mkdir /opt/scratch && \
-    chown pentaho:pentaho /opt/scratch
+RUN DEBIAN_FRONTEND=noninteractive apt-get -qq update && \
+    apt-get install -y xvfb
+
+# Set environment variables for Pentaho
+ENV JAVA_HOME "/opt/ibm/java"
+ENV PENTAHO_JAVA_HOME "/opt/ibm/java"
+ENV PENTAHO_JAVA "/opt/ibm/java/bin/java"
 
 # Support software versions
 # Get this version from https://dev.mysql.com/downloads/connector/j/
@@ -41,26 +34,20 @@ ENV JAVA_VERSION 8
 
 # Install libtcnative libraries and other dependencies
 ADD files/install.sh /opt/install.sh
+ADD files/opt /opt
 RUN /opt/install.sh && rm -f /opt/install.sh
 
-# Now that all the heavy lifting (installing packages and dependencies)
-# is done, begin the small tasks.
-
-# First, add configuration and service files
-ADD files/service /etc/service
-ADD files/opt     /opt
-
 # Pentaho must be downloaded, uncompressed and mounted as a volume
-# in the path /opt/biserver-ce.
+# in the path /opt/pentaho-server
+#
 # Pentaho can be downloaded from: 
-# http://downloads.sourceforge.net/project/pentaho/Business Intelligence Server/${PENTAHO_MAJOR}/biserver-ce-${PENTAHO_MINOR}.zip
+# http://downloads.sourceforge.net/project/pentaho/Business Intelligence Server/${PENTAHO_MAJOR}/pentaho-server-${PENTAHO_MINOR}.zip
 
-VOLUME  /opt/biserver-ce
-WORKDIR /opt/biserver-ce
-
-# Set environment variables for Pentaho
-ENV PENTAHO_JAVA_HOME "/usr/lib/jvm/java-${JAVA_VERSION}-oracle/jre"
-ENV PENTAHO_JAVA "/usr/lib/jvm/java-${JAVA_VERSION}-oracle/jre/bin/java"
+VOLUME  /opt/pentaho-server
+WORKDIR /opt/pentaho-server
 
 # Pentaho port
 EXPOSE 8080
+# Change "start" with "run" in tomcat/bin/startup.sh so it runs in foreground
+CMD /opt/pentaho-server/start-pentaho.sh
+

@@ -17,7 +17,7 @@ To run:
 
 ```
 docker run --rm -p 8080:8080 \
-           -v /opt/pentaho/biserver-ce:/opt/biserver-ce \
+           -v /opt/pentaho/pentaho-server:/opt/pentaho-server \
            --name pentaho pentaho-env
 ```
 
@@ -26,11 +26,11 @@ The container exposes **port 8080**.
 Volumes
 -------
 
-Pentaho runs from directory **/opt/biserver-ce**. You must:
+Pentaho runs from directory **/opt/pentaho-server**. You must:
 
   - Download the Pentaho Business Analytics Platform - Community Edition software from http://community.pentaho.com
   - Unzip it somewhere in your host server, say **/opt/pentaho**
-  - Mount the resulting **/opt/pentaho/biserver-ce** folder to the container, in the **/opt/biserver-ce** path.
+  - Mount the resulting **/opt/pentaho/pentaho-server** folder to the container, in the **/opt/pentaho-server** path.
 
 The container provides the [standalone node for CDC](http://ci.pentaho.com/job/pentaho-cdc-5x/lastSuccessfulBuild/artifact/cdc-pentaho5/dist/cdc-pentaho5-redist-SNAPSHOT.zip) already running, for the benefit of your CDC.
 
@@ -47,7 +47,7 @@ The container includes a helper script to help configure the Pentaho installatio
 e.g, run:
 
 ```
-docker run --rm -it -v /opt/pentaho/biserver-ce:/opt/biserver-ce pentaho-env \
+docker run --rm -it -v /opt/pentaho/pentaho-server:/opt/pentaho-server pentaho-env \
     /opt/config.sh mysql.server.com 3306 prefix_ MySecret1234 > script.sql
 ```
 

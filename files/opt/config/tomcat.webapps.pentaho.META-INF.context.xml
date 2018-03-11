@@ -5,11 +5,11 @@
 		maxWaitMillis="10000" username="%PREFIX%hibuser" password="%PASSWORD%"
 		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://%SERVER%:%PORT%/%PREFIX%hibernate"
 		validationQuery="select 1" />
-
+		
 	<Resource name="jdbc/Quartz" auth="Container" type="javax.sql.DataSource"
 		factory="org.apache.commons.dbcp.BasicDataSourceFactory" maxTotal="20" maxIdle="5"
 		maxWaitMillis="10000" username="%PREFIX%pentaho_user" password="%PASSWORD%"
 		driverClassName="com.mysql.jdbc.Driver" url="jdbc:mysql://%SERVER%:%PORT%/%PREFIX%quartz"
-		validationQuery="1"/>
+		validationQuery="select 1"/>
 
 </Context>
